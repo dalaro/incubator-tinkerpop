@@ -51,13 +51,19 @@ import org.apache.tinkerpop.gremlin.spark.structure.io.InputOutputHelper;
 import org.apache.tinkerpop.gremlin.spark.structure.io.InputRDD;
 import org.apache.tinkerpop.gremlin.spark.structure.io.OutputFormatRDD;
 import org.apache.tinkerpop.gremlin.spark.structure.io.OutputRDD;
+import org.apache.tinkerpop.gremlin.structure.util.Attachable;
+import org.apache.tinkerpop.gremlin.structure.util.detached.DetachedVertexProperty;
+import org.apache.tinkerpop.gremlin.structure.util.star.StarGraph;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.stream.Stream;
+
+import com.google.common.base.Optional;
 
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
@@ -188,9 +194,31 @@ public final class SparkGraphComputer extends AbstractHadoopGraphComputer {
                             hadoopConfiguration.get(Constants.GREMLIN_SPARK_GRAPH_OUTPUT_RDD, null) != null) &&
                             !this.persist.equals(GraphComputer.Persist.NOTHING)) {
                         try {
+                            // Create a new RDD with vertices from graphRDD and the vertexprogram-created properties in viewIncomingRDD
+                            JavaPairRDD<Object, VertexWritable> writableRDD = graphRDD.leftOuterJoin(viewIncomingRDD).mapValues(vertexWritableAndView -> {
+                                VertexWritable vertexWritable = vertexWritableAndView._1();
+                                StarGraph.StarVertex vertex = vertexWritable.get();
+                                Optional<ViewIncomingPayload<Object>> viewOption =vertexWritableAndView._2();
+
+                                // If there is no view, then the VP didn't create any props for this vertex.
+                                // We can just return the vertex by itself in this case.
+                                if (!viewOption.isPresent() || !viewOption.get().hasView()) {
+                                    return vertexWritable;
+                                }
+
+                                // Iterate through the view's properties, attaching each one to the vertex.
+                                List<DetachedVertexProperty<Object>> detachedProps = viewOption.get().getView();
+                                for (DetachedVertexProperty<Object> detachedProp : detachedProps) {
+                                    detachedProp.attach(Attachable.Method.create(vertex));
+                                }
+
+                                // Emit the vertexWritable that encloses the vertex.
+                                return vertexWritable;
+                            });
+
                             hadoopConfiguration.getClass(Constants.GREMLIN_SPARK_GRAPH_OUTPUT_RDD, OutputFormatRDD.class, OutputRDD.class)
                                     .newInstance()
-                                    .writeGraphRDD(apacheConfiguration, graphRDD);
+                                    .writeGraphRDD(apacheConfiguration, writableRDD);
                         } catch (final InstantiationException | IllegalAccessException e) {
                             throw new IllegalStateException(e.getMessage(), e);
                         }
