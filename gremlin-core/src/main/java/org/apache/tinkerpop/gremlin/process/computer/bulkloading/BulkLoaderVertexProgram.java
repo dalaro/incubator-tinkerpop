@@ -217,7 +217,7 @@ public class BulkLoaderVertexProgram implements VertexProgram<Tuple> {
             this.commit(false);
             if (!bulkLoader.useUserSuppliedIds()) {
                 // create an id pair and send it to all the vertex's incoming adjacent vertices
-                sourceVertex.property(DEFAULT_BULK_LOADER_VERTEX_ID, targetVertex.id());
+                sourceVertex.property(DEFAULT_BULK_LOADER_VERTEX_ID, targetVertex.id().toString());
                 messenger.sendMessage(messageScope, Pair.with(sourceVertex.id(), targetVertex.id()));
             }
         } else if (memory.getIteration() == 1) {
