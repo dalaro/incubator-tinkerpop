@@ -217,7 +217,7 @@ public final class StarGraph implements Graph, Serializable {
     //// STAR ELEMENT ////
     //////////////////////
 
-    public abstract class StarElement<E extends Element> implements Element, Attachable<E> {
+    public abstract class StarElement<E extends Element> implements Element, Attachable<E>, Serializable {
 
         protected final Object id;
         protected final String label;
