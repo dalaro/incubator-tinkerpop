@@ -37,6 +37,7 @@ import org.apache.tinkerpop.gremlin.structure.util.wrapped.WrappedVertex;
 import org.apache.tinkerpop.gremlin.structure.util.wrapped.WrappedVertexProperty;
 import org.apache.tinkerpop.gremlin.util.iterator.IteratorUtils;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -47,7 +48,7 @@ import java.util.stream.Collectors;
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
  */
-public final class ComputerGraph implements Graph {
+public final class ComputerGraph implements Graph, Serializable {
 
     private enum State {VERTEX_PROGRAM, MAP_REDUCE}
 
@@ -118,7 +119,7 @@ public final class ComputerGraph implements Graph {
         throw new UnsupportedOperationException();
     }
 
-    public class ComputerElement implements Element, WrappedElement<Element> {
+    public class ComputerElement implements Element, WrappedElement<Element>, Serializable {
         private final Element element;
 
         public ComputerElement(final Element element) {
