@@ -21,7 +21,7 @@ limitations under the License.
     <parent>
         <groupId>org.apache.tinkerpop</groupId>
         <artifactId>tinkerpop</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.1.1-SNAPSHOT-20160112-24ed4907</version>
     </parent>
     <artifactId>gremlin-server</artifactId>
     <name>Apache TinkerPop :: Gremlin Server</name>
@@ -120,7 +120,7 @@ limitations under the License.
                     </execution>
                 </executions>
                 <configuration>
-                    <attach>true</attach>
+                    <attach>false</attach>
                     <descriptors>
                         <descriptor>src/assembly/standalone.xml</descriptor>
                         <descriptor>src/assembly/distribution.xml</descriptor>
