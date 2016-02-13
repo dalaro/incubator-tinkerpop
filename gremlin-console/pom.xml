@@ -21,7 +21,7 @@ limitations under the License.
     <parent>
         <artifactId>tinkerpop</artifactId>
         <groupId>org.apache.tinkerpop</groupId>
-        <version>3.1.2-SNAPSHOT</version>
+        <version>3.1.2-20160212-890131e3</version>
     </parent>
     <artifactId>gremlin-console</artifactId>
     <name>Apache TinkerPop :: Gremlin Console</name>
@@ -171,7 +171,7 @@ limitations under the License.
                     </execution>
                 </executions>
                 <configuration>
-                    <attach>true</attach>
+                    <attach>false</attach>
                     <descriptors>
                         <descriptor>src/assembly/standalone.xml</descriptor>
                         <descriptor>src/assembly/distribution.xml</descriptor>
