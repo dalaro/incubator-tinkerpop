@@ -16,34 +16,52 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.tinkerpop.gremlin.structure.io.gryo;
+package org.apache.tinkerpop.gremlin.structure.io.kryoshim.shaded;
 
-import org.apache.tinkerpop.gremlin.structure.io.kryoshim.InputShim;
-import org.apache.tinkerpop.gremlin.structure.io.kryoshim.KryoShim;
 import org.apache.tinkerpop.gremlin.structure.io.kryoshim.OutputShim;
-import org.apache.tinkerpop.gremlin.structure.io.kryoshim.SerializerShim;
+import org.apache.tinkerpop.shaded.kryo.io.Output;
 
-import java.net.URI;
+public class ShadedOutputAdapter implements OutputShim {
 
-/**
- * @author Stephen Mallette (http://stephen.genoprime.com)
- */
-final class URISerializer implements SerializerShim<URI> {
+    private final Output shadedOutput;
 
-    public URISerializer() { }
-
-    @Override
-    public <O extends OutputShim> void write(final KryoShim<?, O> kryo, final O output, final URI uri) {
-        output.writeString(uri.toString());
+    public ShadedOutputAdapter(Output shadedOutput) {
+        this.shadedOutput = shadedOutput;
     }
 
     @Override
-    public <I extends InputShim> URI read(final KryoShim<I, ?> kryo, final I input, final Class<URI> uriClass) {
-        return URI.create(input.readString());
+    public void writeByte(byte b)
+    {
+        shadedOutput.writeByte(b);
     }
 
     @Override
-    public boolean isImmutable() {
-        return true;
+    public void writeBytes(byte[] array, int offset, int count) {
+        shadedOutput.writeBytes(array, offset, count);
+    }
+
+    @Override
+    public void writeString(String s) {
+        shadedOutput.writeString(s);
+    }
+
+    @Override
+    public void writeLong(long l) {
+        shadedOutput.writeLong(l);
+    }
+
+    @Override
+    public void writeInt(int i) {
+        shadedOutput.writeInt(i);
+    }
+
+    @Override
+    public void writeDouble(double d) {
+        shadedOutput.writeDouble(d);
+    }
+
+    Output getShadedOutput()
+    {
+        return shadedOutput;
     }
 }
