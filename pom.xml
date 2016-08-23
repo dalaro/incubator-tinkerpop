@@ -25,11 +25,18 @@ limitations under the License.
     </parent>
     <groupId>org.apache.tinkerpop</groupId>
     <artifactId>tinkerpop</artifactId>
-    <version>3.2.2-SNAPSHOT</version>
+    <version>3.2.2-20160823-4daefb37</version>
     <packaging>pom</packaging>
     <name>Apache TinkerPop</name>
     <description>A Graph Computing Framework</description>
     <url>http://tinkerpop.apache.org/</url>
+    <distributionManagement>
+        <repository>
+            <id>artifactory.ds.releases</id>
+            <name>datastax-releases-local</name>
+            <url>https://datastax.artifactoryonline.com/datastax/datastax-releases-local/</url>
+        </repository>
+    </distributionManagement>
     <mailingLists>
         <mailingList>
             <name>Users</name>
@@ -127,9 +134,9 @@ limitations under the License.
         <module>gremlin-archetype</module>
     </modules>
     <scm>
-        <connection>scm:git:git@git-wip-us.apache.org:repos/asf/tinkerpop.git</connection>
-        <developerConnection>scm:git:git@git-wip-us.apache.org:repos/asf/tinkerpop.git</developerConnection>
-        <url>https://git-wip-us.apache.org/repos/asf?p=tinkerpop.git</url>
+        <connection>scm:git:git@github.com:dalaro/incubator-tinkerpop.git</connection>
+        <developerConnection>scm:git:git@github.com:dalaro/incubator-tinkerpop.git</developerConnection>
+        <url>https://github.com/dalaro/incubator-tinkerpop</url>
     </scm>
     <properties>
         <commons.configuration.version>1.10</commons.configuration.version>
